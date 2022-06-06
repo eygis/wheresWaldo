@@ -25,9 +25,26 @@ class App extends React.Component {
         this.plusMinus = this.plusMinus.bind(this);
     }
 
+    componentDidMount() {
+        let totalSeconds = 0;
+
+        let timerFunction = () => {
+            totalSeconds++;
+            let hour = Math.floor(totalSeconds / 3600);
+            let minute = Math.floor((totalSeconds - hour * 3600) / 60);
+            let seconds = totalSeconds - (hour * 3600 + minute * 60);
+            hour = hour < 10 ? '0' + hour : hour;
+            minute = minute < 10 ? '0' + minute : minute;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            document.querySelector('#timer').innerHTML = `${hour}:${minute}:${seconds}`;
+        }
+        this.interval = setInterval(timerFunction, 1000);
+    }
+
     componentDidUpdate() {
         console.log(`X: ${this.state.xValue}  Y:${this.state.yValue}`);
         if (this.state.targets.length == 0) {
+            clearInterval(this.interval);
             window.alert('You Win!')
         }
     }
@@ -74,6 +91,9 @@ class App extends React.Component {
                         {this.state.targets.map(target => <li key={target}>{target}</li>)}
                     </ul>
                 </h3>
+            </div>
+            <div id='timerDiv'>
+                <p id='timer'>00:00:00</p>
             </div>
             <div id='content'>
                 <div id='imageDiv'>

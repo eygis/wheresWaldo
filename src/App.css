@@ -24,6 +24,15 @@ body {
   font-weight: normal;
 }
 
+#timerDiv {
+  position: fixed;
+  top: 0;
+  right: 0;
+  background-color: white;
+  border: solid black;
+  font-size: xx-large;
+}
+
 #content {
   border: 1px solid black;
   width: 90%;
