@@ -1,3 +1,5 @@
+Live Site: https://whereswaldo.netlify.app/
+
 *functionally 100% finished, but with some small things to clean up still.
 
 (Where's Wally outside of North America) A game where you need to search for characters like in the children's puzzle book game.
