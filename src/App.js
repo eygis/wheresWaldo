@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState }from "react";
 import collage from '../public/pokecollage.jpeg';
 import Circle from './Circle';
 import Select from "./Select";
-/*import { initializeApp } from "firebase/app";
-import {addDoc} from 'firebase/firestore';
+import Submit from './Submit';
+import Scores from './Scores'
+import { initializeApp } from "firebase/app";
+import {addDoc, collection, doc, getDocs, getFirestore, limit, orderBy, query} from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: "AIzaSyD1GXWAm0te-j4NkripXHCVfo5IvuMGcIs",
@@ -14,8 +16,7 @@ const firebaseConfig = {
   appId: "1:939930606033:web:a3529420df587aff0ba8f0"
 };
 
-const app = initializeApp(firebaseConfig);*/
-
+initializeApp(firebaseConfig);
 import './App.css'
 class App extends React.Component {
     constructor(props) {
@@ -30,13 +31,15 @@ class App extends React.Component {
             },
             xValue: 0,
             yValue: 0,
-            display: 'none'
+            display: 'none',
+            submitted: false
         }
 
         this.cursorPosition = this.cursorPosition.bind(this);
         this.checker = this.checker.bind(this);
         this.plusMinus = this.plusMinus.bind(this);
         this.submitter = this.submitter.bind(this);
+        this.loader = this.loader.bind(this);
     }
 
     componentDidMount() {
@@ -58,7 +61,7 @@ class App extends React.Component {
     componentDidUpdate() {
         if (this.state.targets.length == 0) {
             clearInterval(this.interval);
-            document.querySelector('#gameOver').style.display = 'block';
+            document.querySelector('.gameOver').style.display = 'block';
         }
     }
 
@@ -92,8 +95,24 @@ class App extends React.Component {
       return false
     }
 
-    submitter = () => {
-        console.log(`Name: ${document.querySelector('#name').value} Time: ${document.querySelector('#timer').innerHTML}`)
+    submitter = async () => {
+        try {
+            await addDoc(collection(getFirestore(), 'times'), {
+                name: document.querySelector('#name').value,
+                time: document.querySelector('#timer').innerHTML
+            });
+            this.setState({submitted: true})
+        }
+        catch(err) {
+            console.log(err);
+        }
+    }
+
+    loader = async () => {
+        const timesRef = collection(getFirestore(), 'times');
+        const q = query(timesRef, orderBy('time'), limit(5));
+        const querySnapshot = await getDocs(q);
+        return querySnapshot;   
     }
 
     render() {
@@ -118,11 +137,7 @@ class App extends React.Component {
                 <Select targets={this.state.targets} x={this.state.xValue} y={this.state.yValue} display={this.state.display} checker={this.checker} />
                 </div>
             </div>
-            <div id="gameOver">
-                <h1 className="gameOverText">Congratulations!</h1>
-                <p className="gameOverText">You've found all the characters. Please fill in your name to submit your time!</p>
-                <p className="gameOverText"><input id="name" type='text' placeholder="Enter name here"></input><button onClick={this.submitter}>Submit</button></p>
-            </div>
+            {!this.state.submitted ? <Submit submitter={this.submitter} /> : <Scores loader={this.loader} />}
             </div>
         );
     }

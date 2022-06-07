@@ -88,7 +88,7 @@ body {
   background-color: rgb(85, 83, 83);
 }
 
-#gameOver {
+.gameOver {
   display: none;
   position: fixed;
   left: 50%;
@@ -102,4 +102,8 @@ body {
 
 .gameOverText {
   margin-bottom: 3.5rem;
+}
+
+.scoresText {
+  margin-bottom: 1.5rem;
 }
