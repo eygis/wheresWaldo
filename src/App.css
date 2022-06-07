@@ -1,7 +1,11 @@
 * {
     margin: 0;
     padding: 0;
-  }
+}
+
+#wrapper {
+  position: relative;
+}
 
 body {
   text-align: center;
@@ -13,9 +17,10 @@ body {
 }
 
 #search {
-  border: solid black;
+  border: solid 2px black;
   width: fit-content;
   margin: auto;
+  padding: .5rem;
 }
 
 #search li {
@@ -81,4 +86,20 @@ body {
 
 .listTarget:hover {
   background-color: rgb(85, 83, 83);
+}
+
+#gameOver {
+  display: none;
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%, 0);
+  top: 25%;
+  border: solid 1px black;
+  background-color: white;;
+  width: 80%;
+  margin: auto;
+}
+
+.gameOverText {
+  margin-bottom: 3.5rem;
 }

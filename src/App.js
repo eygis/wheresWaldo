@@ -2,6 +2,19 @@ import React from "react";
 import collage from '../public/pokecollage.jpeg';
 import Circle from './Circle';
 import Select from "./Select";
+/*import { initializeApp } from "firebase/app";
+import {addDoc} from 'firebase/firestore';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD1GXWAm0te-j4NkripXHCVfo5IvuMGcIs",
+  authDomain: "where-s-waldo-966e1.firebaseapp.com",
+  projectId: "where-s-waldo-966e1",
+  storageBucket: "where-s-waldo-966e1.appspot.com",
+  messagingSenderId: "939930606033",
+  appId: "1:939930606033:web:a3529420df587aff0ba8f0"
+};
+
+const app = initializeApp(firebaseConfig);*/
 
 import './App.css'
 class App extends React.Component {
@@ -23,6 +36,7 @@ class App extends React.Component {
         this.cursorPosition = this.cursorPosition.bind(this);
         this.checker = this.checker.bind(this);
         this.plusMinus = this.plusMinus.bind(this);
+        this.submitter = this.submitter.bind(this);
     }
 
     componentDidMount() {
@@ -42,10 +56,9 @@ class App extends React.Component {
     }
 
     componentDidUpdate() {
-        console.log(`X: ${this.state.xValue}  Y:${this.state.yValue}`);
         if (this.state.targets.length == 0) {
             clearInterval(this.interval);
-            window.alert('You Win!')
+            document.querySelector('#gameOver').style.display = 'block';
         }
     }
 
@@ -56,7 +69,6 @@ class App extends React.Component {
     }
 
     checker = (name) => {
-         console.log(this.plusMinus(this.state.xValue, this.state.yValue, this.state.exactCoordinates[name][0], this.state.exactCoordinates[name][1]))
          if (this.plusMinus(this.state.xValue, this.state.yValue, this.state.exactCoordinates[name][0], this.state.exactCoordinates[name][1])) {
              this.setState({
                  targets: this.state.targets.filter(target => target != name)
@@ -80,6 +92,10 @@ class App extends React.Component {
       return false
     }
 
+    submitter = () => {
+        console.log(`Name: ${document.querySelector('#name').value} Time: ${document.querySelector('#timer').innerHTML}`)
+    }
+
     render() {
 
         return (
@@ -101,6 +117,11 @@ class App extends React.Component {
                 <Circle x={this.state.xValue} y={this.state.yValue} display={this.state.display} />
                 <Select targets={this.state.targets} x={this.state.xValue} y={this.state.yValue} display={this.state.display} checker={this.checker} />
                 </div>
+            </div>
+            <div id="gameOver">
+                <h1 className="gameOverText">Congratulations!</h1>
+                <p className="gameOverText">You've found all the characters. Please fill in your name to submit your time!</p>
+                <p className="gameOverText"><input id="name" type='text' placeholder="Enter name here"></input><button onClick={this.submitter}>Submit</button></p>
             </div>
             </div>
         );
