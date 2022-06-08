@@ -66,9 +66,11 @@ class App extends React.Component {
     }
 
     cursorPosition = (e) => {
-        this.setState({xValue: e.nativeEvent.offsetX});
-        this.setState({yValue: e.nativeEvent.offsetY});
-        this.setState({display: 'block'});
+        if (this.state.targets.length > 0) {
+            this.setState({xValue: e.nativeEvent.offsetX});
+            this.setState({yValue: e.nativeEvent.offsetY});
+            this.setState({display: 'block'});
+        }
     }
 
     checker = (name) => {
